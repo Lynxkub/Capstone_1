@@ -37,4 +37,4 @@ Account for waste- All of the numbers are based in a “perfect world”. This i
 
 Api that I will be using is the Kroger API
 
-Link to my database Schema design https://docs.google.com/spreadsheets/d/1mtUNDS5T0X6ZQ9L5My7RtincxkdQGabZ0YL7P_JuZkw/edit#gid=0
+Link to my database Schema design https://docs.google.com/spreadsheets/d/e/2PACX-1vRAOX1ynJwAiIASif8VL1dnjRroSZpdUg9YVSe4-cC9E9Q3gH639vVXjSFo49WYWk5Lyuej0LwAUKSx/pubhtml
