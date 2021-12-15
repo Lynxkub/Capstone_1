@@ -35,3 +35,6 @@ Stretch goals -
 Create app for real time applications -Create realistic days connected to an actual calendar so the app is more realistic
 Account for waste- All of the numbers are based in a “perfect world”. This is considered a “theoretical food cost”. So I would like to find a way to account for a waste goal. Restaurant operators conduct physical inventory weekly or monthly in order to get an accurate grasp on how the business is running. So the reality of the results of the  inventory count will be different than what the app is saying. So I would like to allow for some waste allowance (2%-5%)
 
+Api that I will be using is the Kroger API
+
+Link to my database Schema design https://docs.google.com/spreadsheets/d/1mtUNDS5T0X6ZQ9L5My7RtincxkdQGabZ0YL7P_JuZkw/edit#gid=0
