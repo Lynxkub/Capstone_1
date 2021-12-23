@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Sales Forcasting{% endblock %}
+
+{% block content %}
+<table>
+    <h4>Weekly Forecast</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+    <tr>
+        <th>{{forecast.monday}}</th>
+        <th>{{forecast.tuesday}}</th>
+        <th>{{forecast.wednesday}}</th>
+        <th>{{forecast.thursday}}</th>
+        <th>{{forecast.friday}}</th>
+        <th>{{forecast.saturday}}</th>
+        <th>{{forecast.sunday}}</th>
+        <th>{{forecast.weekly_total}}</th>
+    </tr>
+</table>
+<a href = '/update_forecast'>Edit Forecast</a>
+<table>
+    <h4>Weekly Actuals</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+    <tr>
+        <th>{{actuals.monday or 0}}</th>
+        <th>{{actuals.tuesday or 0}}</th>
+        <th>{{actuals.wednesday or 0}}</th>
+        <th>{{actuals.thursday or 0}}</th>
+        <th>{{actuals.friday or 0}}</th>
+        <th>{{actuals.saturday or 0}}</th>
+        <th>{{actuals.sunday or 0}}</th>
+        <th>{{actuals.weekly_total or 0}}</th>
+    </tr>
+</table>
+<a href = '/update_actuals'>Update Actuals</a>
+
+<table>
+    <h4>AvF $$</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+    <tr>
+        <th>{{avf_dollars.monday}}</th>
+        <th>{{avf_dollars.tuesday}}</th>
+        <th>{{avf_dollars.wednesday}}</th>
+        <th>{{avf_dollars.thursday}}</th>
+        <th>{{avf_dollars.friday}}</th>
+        <th>{{avf_dollars.saturday}}</th>
+        <th>{{avf_dollars.sunday}}</th>
+        <th>{{avf_dollars.weekly_total}}</th>
+    </tr>
+</table>
+
+<table>
+    <h4>AvF %%</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+    <tr>
+        <th>{{avf_percent.monday}}%</th>
+        <th>{{avf_percent.tuesday}}%</th>
+        <th>{{avf_percent.wednesday}}%</th>
+        <th>{{avf_percent.thursday}}%</th>
+        <th>{{avf_percent.friday}}%</th>
+        <th>{{avf_percent.saturday}}%</th>
+        <th>{{avf_percent.sunday}}%</th>
+        <th>{{avf_percent.weekly_total}}%</th>
+    </tr>
+</table>
+
+<div>
+    <form action = '/confirm_sales_submit'>
+    <button>Submit Weekly Sales</button>
+    <p>Only do at the end of the week! This will wipe current week of sales and log it in historical sales!</p>
+</form>
+</div>
+
+{% endblock %}

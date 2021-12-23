@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{user.restaurant_name}}{% endblock %}
+
+{% block content %}
+
+<h1>{{user.restaurant_name}}</h1>
+<h3>Location: {{user.location}}</h3>
+<h3>Ideal Food Cost: {{user.ideal_food_cost}}%</h3>
+
+{% for menu in menus %}
+<p><a href = '/new_menu_items/{{menu.id}}'>{{menu.menu_name}} - {{menu.menu_description}}</a>
+    <button data-id = '{{menu.id}}' class = 'menu_delete_button'>X</button>
+    
+</p>
+{% endfor %}
+
+
+<p>
+    <a href = '/new_menu'>Create New Menu</a>
+</p>
+
+
+
+{% endblock %}

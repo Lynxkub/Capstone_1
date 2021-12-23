@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Week {{sales_week.week}}{% endblock %}
+
+{% block content %}
+<table>
+    <h4>Week {{sales_week.week}} Forecast</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+
+<tr>
+    <th>{{sales_week.monday_forecasted}}</th>
+    <th>{{sales_week.tuesday_forecasted}}</th>
+    <th>{{sales_week.wednesday_forecasted}}</th>
+    <th>{{sales_week.thursday_forecasted}}</th>
+    <th>{{sales_week.friday_forecasted}}</th>
+    <th>{{sales_week.saturday_forecasted}}</th>
+    <th>{{sales_week.sunday_forecasted}}</th>
+    <th>{{sales_week.forecasted_total}}</th>
+</tr>
+</table>
+<table>
+    <h4>Week {{sales_week.week}} Actuals</h4>
+    <tr>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Weekly Total</th>
+    </tr>
+    <tr>
+       <th>{{sales_week.monday_actual}}</th>
+       <th>{{sales_week.tuesday_actual}}</th>
+       <th>{{sales_week.wednesday_actual}}</th>
+       <th>{{sales_week.thursday_actual}}</th>
+       <th>{{sales_week.friday_actual}}</th>
+       <th>{{sales_week.saturday_actual}}</th>
+       <th>{{sales_week.sunday_actual}}</th>
+       <th>{{sales_week.actual_total}}</th>
+    </tr>
+</table>
+{% endblock %}
