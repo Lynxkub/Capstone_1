@@ -34,6 +34,8 @@ class NewMenuItemForm(FlaskForm):
 
 # ######################## Product Forms ##############################
 
+class NewProductForm(FlaskForm):
+    product_name = StringField("Product Name", validators=[InputRequired()])
 
 
 

@@ -59,8 +59,8 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String)
-    price = db.Column(db.Integer)
-    pack_size = db.Column(db.Integer)
+    price = db.Column(db.Float)
+    
 
 
 
@@ -76,7 +76,7 @@ class Menu(db.Model):
     menu_name = db.Column(db.String, nullable = False)
     menu_description = db.Column(db.String)
 
-    menu_items = db.relationship('MenuItem')
+    menu_items = db.relationship('MenuItem', backref = 'menus')
 
 
 class MenuItem(db.Model):
@@ -91,16 +91,17 @@ class MenuItem(db.Model):
     menu_price = db.Column(db.Float, nullable = False)
     plate_price = db.Column(db.Float, default = 0.00, nullable = False)
 
-
+    menu_item_ingredients = db.relationship('MenuItemIngredients', backref = 'menu_items')
+    
 class MenuItemIngredients(db.Model):
     """Table for connecting individual products with menu items"""
 
     __tablename__ = 'menu_item_ingredients'
-    
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), primary_key = True)
+    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'))
 
-
+    item_name = db.relationship('Product')
 #  ############################## Inventory Tables ############################
 
 

@@ -1,9 +1,11 @@
-from flask import Flask, redirect, render_template, flash, request, session, g, jsonify
+from flask import Flask, redirect, render_template, flash, request, session, g, jsonify, json
 from flask_debugtoolbar import DebugToolbarExtension
 from werkzeug import datastructures
 from models import SalesActual, SalesAvFDollars, SalesAvFPercent, connect_db, db, User, Product, bcrypt, MenuItemIngredients, Menu, MenuItem, SalesForecasting, SalesActual, SalesAvFPercent, SalesAvFDollars, HistoricalSalesInfo
-from forms import SignUpForm, SignInForm, NewMenuItemForm, NewMenuForm, WeeklyForecastForm, WeeklyActualsForm
+from forms import SignUpForm, SignInForm, NewMenuItemForm, NewMenuForm, WeeklyForecastForm, WeeklyActualsForm, NewProductForm
 from datetime import date
+import requests
+from api_logic import get_product_id, get_product_price, make_api_search, specific_product_search, product_api_search
 app=Flask(__name__)
 
 app.config['SECRET_KEY']='secret'
@@ -19,7 +21,13 @@ connect_db(app)
 now = date.today()
 
 curr_user = 'username'
-# ######################### Login/logout pages  ############################
+
+
+
+
+
+# api call works, next is loggin results into database and connecting menu items with products
+# ##################### Login/logout pages #########################
 
 
 
@@ -28,8 +36,12 @@ curr_user = 'username'
 @app.route('/')
 def landing_page():
     """Landing Page"""
-
-    return render_template('home.html')
+    try:
+        user = User.query.get(session['user_id'])
+        if user:
+            return redirect(f'/user/{user.id}')
+    except KeyError:
+        return render_template('home.html')
 
 @app.route('/sign_up', methods = ['GET', 'POST'])
 def sign_up():
@@ -151,7 +163,7 @@ def create_new_menu():
         flash('Created New Menu')
         return redirect(f'/user/{user.id}')
 
-    return render_template('new_menu.html', form = form)
+    return render_template('new_menu.html', form = form, user = user)
     
 
 
@@ -164,6 +176,7 @@ def create_new_menu_items(menu_id):
 
     form = NewMenuItemForm()
     curr_menu = Menu.query.get_or_404(menu_id)
+    menu_items = MenuItem.query.all()
     user = User.query.get_or_404(session['user_id'])
     if request.method == 'POST':
         data = request.json
@@ -183,7 +196,7 @@ def create_new_menu_items(menu_id):
         return redirect(f'/new_menu_items/{curr_menu.id}')
         
 
-    return render_template('new_menu_item.html', form = form, menu=curr_menu)
+    return render_template('new_menu_item.html', form = form, menu=curr_menu, user = user, menu_items = menu_items)
 
 
 @app.route('/api/menu/<int:id>', methods = ['DELETE'])
@@ -196,15 +209,67 @@ def delete_menu(id):
 
 
 
+# Need to add a link element to the creation of a menu item - ajax string
+
 
 
 
 #  ############################# Product Pages #############################
 
-# @app.route('/add_product')
-# def add_product():
-#     """Add product to a menu"""
-#     return render_template('add_product.html')
+
+@app.route('/menu_item_page/<int:id>', methods = ['GET', 'POST'])
+def item_page(id):
+    """Displays a single menu item where a user can add ingredients"""
+    item = MenuItem.query.get(id)
+    user = User.query.get_or_404(session['user_id'])
+    form = NewProductForm()
+    ingredients = MenuItemIngredients.query.filter(MenuItemIngredients.menu_item_id == item.id)
+    if form.validate_on_submit():
+        item_name = form.product_name.data
+        item_list = Product.query.filter(Product.name == item_name)
+        all_matches = item_list.all()
+        if len(all_matches) == 0:
+            try:
+                product_search = product_api_search(item_name)
+                new_product = Product(
+                name = product_search[0],
+                price = product_search[1]
+                 )
+                db.session.add(new_product)
+                db.session.commit()
+                menu_item = MenuItemIngredients(
+                product_id = new_product.id,
+                menu_item_id = item.id
+                )
+                db.session.add(menu_item)
+                db.session.commit()
+            except ValueError:
+                flash('Product Not Found')
+                return redirect(f'/menu_item_page/{item.id}')
+            
+            return redirect(f'/menu_item_page/{item.id}')
+        else:
+            menu_item = MenuItemIngredients(
+                product_id = all_matches[0].id,
+                menu_item_id = item.id
+            )
+            db.session.add(menu_item)
+            db.session.commit()
+            return redirect(f'/menu_item_page/{item.id}')
+    print('****************')
+    print(ingredients)
+    return render_template('menu_item.html', item = item, user = user, form = form, ingredients = ingredients)
+
+
+@app.route('/api/delete_product/<int:product_id>', methods = ['DELETE'])
+def delete_product(product_id):
+    """Delete a prodcut from a menu item"""
+    product = MenuItemIngredients.query.get(product_id)
+    
+    db.session.delete(product)
+    db.session.commit()
+
+    return jsonify(message = 'deleted')
 
 
 

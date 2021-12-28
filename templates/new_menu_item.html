@@ -10,13 +10,13 @@
 {% for item in menu.menu_items %}
 
 <div  class = 'card' style = 'width: 18rem;'>
-    <div class = 'card-body'>
+    <a href = '/menu_item_page/{{item.id}}'><div class = 'card-body' data-id = {{item.id}}>
         <h5 class='card-title'>{{item.menu_item_name}}</h5>
         <h6 class = 'card-subtitle mb=2 text-muted'>{{item.menu_description}}</h6>
         <h6 class = 'card-subtitle mb=2 text-muted'>{{item.menu_price}}</h6>
 
 
-</div>
+</div></a>
 </div>
 
 {% endfor %}
