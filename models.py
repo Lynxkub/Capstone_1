@@ -105,7 +105,71 @@ class MenuItemIngredients(db.Model):
 #  ############################## Inventory Tables ############################
 
 
+class Purchases(db.Model):
+    """Table to keep track or purchases"""
 
+    __tablename__ = 'purchases'
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    amount_spent = db.Column(db.Float, nullable = False)
+    amount_purchased = db.Column(db.Integer, nullable = False)
+    date_purchased = db.Column(db.Date)
+    week_purchased = db.Column(db.Integer, nullable = False)
+
+    product_name = db.relationship('Product')
+
+class Budget(db.Model):
+    """Keeps a running weekly budget for user"""
+
+    __tablename__ = 'budgets'
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    starting_budget = db.Column(db.Float, nullable = False)
+    weekly_purchases = db.Column(db.Float, nullable = False)
+    remaining_budget = db.Column(db.Float, nullable = False)
+
+class BeginningInventory(db.Model):
+    """Beginning Inventory for the week for each product"""
+
+    __tablename__ = 'beginning_inventories'
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    beginning_item_count = db.Column(db.Float, default = 0)
+    beginning_dollar_amount = db.Column(db.Float, default = 0)
+    week = db.Column(db.Integer, nullable = False)
+
+    item_name = db.relationship('Product')
+
+class EndingInventory(db.Model):
+    """Ending Inventory for the week for each product"""
+
+    __tablename__ = 'ending_inventories'
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    ending_item_count = db.Column(db.Numeric(10,2), nullable = False)
+    ending_dollar_amount = db.Column(db.Float, nullable = False)
+    week = db.Column(db.Integer, nullable = False)
+
+    item_name = db.relationship('Product')
+
+
+class InventoryResults(db.Model):
+    """Results for a weekly inventory count"""
+
+    __tablename__ = 'inventory_results'
+
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    actual_food_cost = db.Column(db.Float)
+    actual_vs_goal_food_cost = db.Column(db.Float)
+    week = db.Column(db.Integer, nullable = False)
 
 #  ############################### Sales Tables ###############################
 

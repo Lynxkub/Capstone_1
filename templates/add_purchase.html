@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Purchase{% endblock %}
+
+{% block content %}
+<h1>Purchases for week {{purchases.week_purchased}}</h1>
+<form  method = 'POST'>
+    {{form.hidden_tag()}}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+        {{field.label}}
+        {{field}}
+
+        {% for error in field.error %}
+        {{error}}
+        {% endfor %}
+    </p>
+    {% endfor %}
+    <button id = 'add_purchase'>Add Purchase</button>
+</form>
+
+{% for purchase in purchases %}
+<p>{{purchase.product_name.name}}</p>
+<p>{{purchase.amount_purchased}}</p>
+<p>${{purchase.amount_spent}}</p>
+<p>{{purchase.date_purchased}}</p>
+{% endfor %}
+{% endblock %}

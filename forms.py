@@ -1,7 +1,12 @@
 from flask.app import Flask
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, IntegerField, PasswordField, FloatField
+from wtforms import StringField, EmailField, IntegerField, PasswordField, FloatField, DateField, SelectField
+from wtforms import validators
 from wtforms.validators import InputRequired, Optional, Email
+from wtforms.widgets.core import Input
+
+
+
 
 
 # ####################### User Forms #################################
@@ -38,7 +43,10 @@ class NewProductForm(FlaskForm):
     product_name = StringField("Product Name", validators=[InputRequired()])
 
 
-
+class NewPurchaseForm(FlaskForm):
+    product_name = StringField("Product Name", validators=[InputRequired()])
+    units_purchased = IntegerField('Amount Purchased', validators = [InputRequired()])
+    date_purchased = DateField('Date Purchased', validators = [InputRequired()])
 
 #  ######################### Forecasting/Sales  Forms #########################
 
@@ -60,3 +68,10 @@ class WeeklyActualsForm(FlaskForm):
     friday = IntegerField('Friday')
     saturday = IntegerField('Saturday')
     sunday = IntegerField('Sunday')
+
+
+# ############################ Inventory Forms ##############################
+
+class EndingInventoryForm(FlaskForm):
+    product = SelectField('Product', coerce=int)
+    amount_on_hand = IntegerField('Ending Inventory Count', validators = [InputRequired()])

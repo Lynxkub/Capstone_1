@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}{{user.restaurant_name}} Inventory{% endblock %}
+
+
+{% block content %}
+
+<h4>Weekly Purchases:</h4>
+
+<h4>Current Budget:</h4>
+<p>Starting Budget: {{budget.starting_budget}}</p>
+<p>Weekly Purchases : {{budget.weekly_purchases}}</p>
+<p>Remaining Budget : {{budget.remaining_budget}}</p>
+<a href ='/add_purchase'>Add a Purchase</a>
+<a href = '/inventory_count/{{user.id}}'>Inventory Count</a>
+<a href = '/historic_inventory_results/{{user.id}}'>Inventory Results</a>
+
+{% endblock %}

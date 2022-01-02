@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Count{% endblock %}
+
+{% block content %}
+
+<form  method = 'POST'>
+    {{form.hidden_tag()}}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+        {{field.label}}
+        {{field}}
+
+        {% for error in field.error %}
+        {{error}}
+        {% endfor %}
+    </p>
+    {% endfor %}
+
+    <button id = 'add_count' data-id = '{{user.id}}'>Submit Count For Product</button>
+    
+</form>
+<a href = '/first_check_submit'><button id = 'full_submit' data-id = '{{user.id}}'>Submit Full Count</button></a>
+<ul id = 'end_inv_list'>
+{% for item in end_inv %}
+<li data-id = '{{item.id}}' class = 'delete_entry'>{{item.item_name.name}} - {{item.ending_item_count}} - ${{item.ending_dollar_amount}}
+<button class = 'delete_item' data-id = '{{item.id}}'>X</button>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

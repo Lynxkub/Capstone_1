@@ -48,3 +48,29 @@ async function delete_ingredient(){
 }
 
 $('.item_delete_button').click(delete_ingredient)
+
+async function addEndingInvCount(e){
+    e.preventDefault();
+    const id = $(this).data('id');
+    
+    let product_name = $('#product').val();
+    let ending_count = $('#amount_on_hand').val();
+
+    const inv_item = await axios.post(`/inventory_count/${id}`, {product_name, ending_count})
+    $('#amount_on_hand').val('');
+   
+}
+
+$('#add_count').click(addEndingInvCount)
+
+
+async function deleteEntry(){
+    
+    const id = $(this).data('id');
+    await axios.delete(`/api/delete_entry/${id}`)
+    $(this).parent().remove();
+}
+
+$('.delete_item').click(deleteEntry)
+
+// works, now just need to add the list appending as the counts are entered. As well as a way to delete them
