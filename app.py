@@ -8,14 +8,15 @@ import requests
 from decimal import Decimal
 from api_logic import get_product_id, get_product_price, make_api_search, specific_product_search, product_api_search
 from sqlalchemy.exc import IntegrityError
-
+import os
 app=Flask(__name__)
 
-app.config['SECRET_KEY']='secret'
+app.config['SECRET_KEY']= os.environ.get('SECRET_KEY', 'secret')
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql:///food_cost_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
 
 debug=DebugToolbarExtension(app)
 
