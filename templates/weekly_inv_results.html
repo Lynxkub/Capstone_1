@@ -4,15 +4,15 @@
 
 
 {% block content %}
-<table>
+<table class = 'table table-bordered border-dark'>
 <h4>Week {{week_res.week}} Inventory Results</h4>
 <tr>
-    <th>Actal Food Cost</th>
-    <th>Actual vs Goal Food Cost</th>
+    <th scope = 'col'>Actal Food Cost</th>
+    <th scope = 'col'>Actual vs Goal Food Cost</th>
 </tr>
 <tr>
-    <th>{{week_res.actual_food_cost}}</th>
-    <th>{{week_res.actual_vs_goal_food_cost}}</th>
+    <td>{{week_res.actual_food_cost}}</td>
+    <td>{{week_res.actual_vs_goal_food_cost}}</td>
 </tr>
 </table>
 

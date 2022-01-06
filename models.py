@@ -72,7 +72,7 @@ class Menu(db.Model):
     __tablename__ = 'menus'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False, )
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'), nullable = False)
     menu_name = db.Column(db.String, nullable = False)
     menu_description = db.Column(db.String)
 
@@ -84,7 +84,7 @@ class MenuItem(db.Model):
     __tablename__ = 'menu_items'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'), nullable = False)
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), nullable = False)
     menu_item_name = db.Column(db.String, nullable = False)
     menu_description = db.Column(db.String)
@@ -111,7 +111,7 @@ class Purchases(db.Model):
     __tablename__ = 'purchases'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     amount_spent = db.Column(db.Float, nullable = False)
     amount_purchased = db.Column(db.Integer, nullable = False)
@@ -126,7 +126,7 @@ class Budget(db.Model):
     __tablename__ = 'budgets'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     starting_budget = db.Column(db.Float, nullable = False)
     weekly_purchases = db.Column(db.Float, nullable = False)
     remaining_budget = db.Column(db.Float, nullable = False)
@@ -137,7 +137,7 @@ class BeginningInventory(db.Model):
     __tablename__ = 'beginning_inventories'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     beginning_item_count = db.Column(db.Float, default = 0)
     beginning_dollar_amount = db.Column(db.Float, default = 0)
@@ -151,7 +151,7 @@ class EndingInventory(db.Model):
     __tablename__ = 'ending_inventories'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     ending_item_count = db.Column(db.Numeric(10,2), nullable = False)
     ending_dollar_amount = db.Column(db.Float, nullable = False)
@@ -166,7 +166,7 @@ class InventoryResults(db.Model):
     __tablename__ = 'inventory_results'
 
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     actual_food_cost = db.Column(db.Float)
     actual_vs_goal_food_cost = db.Column(db.Float)
     week = db.Column(db.Integer, nullable = False)
@@ -179,7 +179,8 @@ class SalesForecasting(db.Model):
 
     __tablename__ = 'sales_forecasts'
 
-    store_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    store_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'CASCADE'))
     monday = db.Column(db.Integer, nullable = False)
     tuesday = db.Column(db.Integer, nullable = False)
     wednesday = db.Column(db.Integer, nullable = False)
@@ -197,7 +198,8 @@ class SalesActual(db.Model):
 
     __tablename__ = 'sales_actuals'
 
-    store_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    store_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     monday = db.Column(db.Integer, default = 0, nullable = False)
     tuesday = db.Column(db.Integer, default = 0, nullable = False)
     wednesday = db.Column(db.Integer, default = 0, nullable = False)
@@ -214,7 +216,8 @@ class SalesAvFDollars(db.Model):
 
     __tablename__ = 'sales_avf_dollars'
 
-    store_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    store_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     monday = db.Column(db.Integer, default = 0, nullable = False)
     tuesday = db.Column(db.Integer, default = 0, nullable = False)
     wednesday = db.Column(db.Integer, default = 0, nullable = False)
@@ -231,7 +234,8 @@ class SalesAvFPercent(db.Model):
 
     __tablename__ = 'sales_avf_percent'
 
-    store_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    store_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     monday = db.Column(db.Float, default = 0, nullable = False)
     tuesday = db.Column(db.Float, default = 0, nullable = False)
     wednesday = db.Column(db.Float, default = 0, nullable = False)
@@ -248,7 +252,7 @@ class HistoricalSalesInfo(db.Model):
 
     __tablename__ = 'historic_sales'
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    store_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    store_id = db.Column(db.Integer, db.ForeignKey('users.id' , ondelete = 'cascade'))
     date_logged = db.Column(db.Date)
     monday_forecasted = db.Column(db.Integer, nullable = False)
     tuesday_forecasted = db.Column(db.Integer, nullable = False)

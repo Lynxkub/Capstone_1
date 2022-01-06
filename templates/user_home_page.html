@@ -9,15 +9,15 @@
 <h3>Ideal Food Cost: {{user.ideal_food_cost}}%</h3>
 
 {% for menu in menus %}
-<p><a href = '/new_menu_items/{{menu.id}}'>{{menu.menu_name}} - {{menu.menu_description}}</a>
-    <button data-id = '{{menu.id}}' class = 'menu_delete_button'>X</button>
+<p><a href = '/new_menu_items/{{menu.id}}' class = 'btn btn-success' role = 'button'>{{menu.menu_name}} - {{menu.menu_description}}</a>
+    <button  type = 'button' data-id = '{{menu.id}}' class = 'menu_delete_button btn btn-sm btn-outline-danger'  >X</button>
     
 </p>
 {% endfor %}
 
 
 <p>
-    <a href = '/new_menu'>Create New Menu</a>
+    <a href = '/new_menu' class = 'btn btn-primary' role = 'button'>Create New Menu</a>
 </p>
 
 

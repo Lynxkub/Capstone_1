@@ -2,7 +2,7 @@ from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms import StringField, EmailField, IntegerField, PasswordField, FloatField, DateField, SelectField
 from wtforms import validators
-from wtforms.validators import InputRequired, Optional, Email
+from wtforms.validators import InputRequired, Optional
 from wtforms.widgets.core import Input
 
 
@@ -74,4 +74,4 @@ class WeeklyActualsForm(FlaskForm):
 
 class EndingInventoryForm(FlaskForm):
     product = SelectField('Product', coerce=int)
-    amount_on_hand = IntegerField('Ending Inventory Count', validators = [InputRequired()])
+    amount_on_hand = IntegerField('Ending Count', validators = [InputRequired()])

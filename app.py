@@ -7,6 +7,7 @@ from datetime import date, timedelta
 import requests
 from decimal import Decimal
 from api_logic import get_product_id, get_product_price, make_api_search, specific_product_search, product_api_search
+from sqlalchemy.exc import IntegrityError
 
 app=Flask(__name__)
 
@@ -62,20 +63,24 @@ def sign_up():
     form = SignUpForm()
 
     if form.validate_on_submit():
-
-        user = User.signup(
+        try:
+            user = User.signup(
             username = form.username.data,
             password = form.password.data,
             restaurant_name = form.restaurant_name.data,
             location = form.location.data or 'N/A',
             ideal_food_cost = form.ideal_food_cost.data
-        )
-        session['username'] = user.username
+            )
+            
         
         
-        db.session.commit()
-        flash('User Created')
-        return redirect(f'/user/{user.id}')
+            db.session.commit()
+            session['username'] = user.username
+            flash('User Created', 'success')
+            return redirect(f'/user/{user.id}')
+        except IntegrityError:
+            flash('Username Already Exists')
+            return redirect('/sign_up')
 
     return render_template('sign_up.html', form = form)
 
@@ -91,10 +96,10 @@ def login():
         if user:
             session['username'] = user.username
             session['user_id'] = user.id
-            flash(f"Welcome Back {user.username}!")
+            flash(f"Welcome Back {user.username}!", 'success')
             
             return redirect(f'/user/{user.id}')
-        flash('Invalid credentials')
+        flash('Invalid credentials', 'danger')
 
 
     return render_template('login.html', form = form)
@@ -104,7 +109,7 @@ def logout():
     """Logs user out of application"""
     session.pop('username')
     session.pop('user_id')
-    flash('Successfully Logged Out')
+    flash('Successfully Logged Out', 'success')
     return redirect('/')
 
 
@@ -114,7 +119,7 @@ def logout():
 def user_home_page(user_id):
     """Shows user home page"""
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
    
     user = User.query.get_or_404(user_id)
@@ -126,7 +131,7 @@ def user_home_page(user_id):
 def edit_user_profile():
     """Edit user profile"""
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
 
 
@@ -137,7 +142,7 @@ def edit_user_profile():
         username = user.username
         password = form.password.data
         if User.authenticate(username, password) == False:
-            flash('Password does not match. Cannot change password')
+            flash('Password does not match. Cannot change password', 'danger')
             return redirect(f'/user/{user.id}')
         else:
             user.username = form.username.data
@@ -147,7 +152,7 @@ def edit_user_profile():
             session['username'] = user.username
             db.session.add(user)
             db.session.commit()
-            flash('Changes Successful')
+            flash('Changes Successful', 'success')
             return redirect(f'/user/{user.id}')
 
 
@@ -160,7 +165,7 @@ def edit_user_profile():
 def create_new_menu():
     """Create new menu for user"""
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
 
     form = NewMenuForm()
@@ -173,7 +178,7 @@ def create_new_menu():
         )
         db.session.add(new_menu)
         db.session.commit()
-        flash('Created New Menu')
+        flash('Created New Menu', 'success')
         return redirect(f'/user/{user.id}')
 
     return render_template('new_menu.html', form = form, user = user)
@@ -184,7 +189,7 @@ def create_new_menu():
 def create_new_menu_items(menu_id):
     """Create new menu items for user"""
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
 
     form = NewMenuItemForm()
@@ -257,7 +262,7 @@ def item_page(id):
                 db.session.add(menu_item)
                 db.session.commit()
             except ValueError:
-                flash('Product Not Found')
+                flash('Product Not Found', 'info')
                 return redirect(f'/menu_item_page/{item.id}')
             
             return redirect(f'/menu_item_page/{item.id}')
@@ -339,7 +344,7 @@ def add_purchase():
                 db.session.add(new_product)
                 db.session.commit()
             except:
-                flash('Could Not Locate Product, try a different product name')
+                flash('Could Not Locate Product, try a different product name', 'info')
                 return redirect('/add_purchase')
         new_purchase = Purchases(
             user_id = user.id,
@@ -351,7 +356,7 @@ def add_purchase():
         )
         db.session.add(new_purchase)
         db.session.commit()
-        flash('Purchase Added')
+        flash('Purchase Added', 'success')
         return redirect('/add_purchase')
     return render_template('add_purchase.html', user = user, form = form, purchases = purchases)
 
@@ -381,7 +386,7 @@ def inventory_count_page(user_id):
         )
         db.session.add(ending_inv_result)
         db.session.commit()
-        flash('Added Ending Count')
+        flash('Added Ending Count', 'success')
         return redirect(f'/inventory_count/{user.id}')
     
    
@@ -456,7 +461,7 @@ def submit_full_count():
         
 
 
-    flash('Inventory Results Saved')
+    flash('Inventory Results Saved', 'success')
     return redirect(f'/inventory_home_page/{user.id}')
 
 @app.route('/historic_inventory_results/<int:user_id>')
@@ -488,7 +493,7 @@ def sales_home_page():
     """Users sales home page that shows sales forecasts and data"""
 
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
     user = User.query.get_or_404(session['user_id'])
     forecast = SalesForecasting.query.get(user.id)
@@ -503,7 +508,7 @@ def update_forecast():
 
 
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
 
 
@@ -541,7 +546,7 @@ def update_forecast():
             db.session.commit()
             set_budget[0].starting_budget = (user.ideal_food_cost / 100) * (form.monday.data + form.tuesday.data + form.wednesday.data + form.thursday.data + form.friday.data + form.saturday.data + form.sunday.data)
             db.session.commit()
-            flash('Forecast Updated')
+            flash('Forecast Updated', 'success')
             return redirect('/sales')
     except:
         form = WeeklyForecastForm()
@@ -632,7 +637,7 @@ def update_forecast():
         # for i in sales_info:
         #     db.session.add(i)
         # db.session.commit()
-        flash('Forecast Submitted')
+        flash('Forecast Submitted', 'success')
         return redirect('/sales')
     return render_template('update_forecast.html', form = form, user = user)
 
@@ -641,7 +646,7 @@ def update_actuals():
     """Allow user to update currently weekly actual sales"""
 
     if curr_user not in session:
-        flash('Please login to access')
+        flash('Please login to access', 'warning')
         return redirect('/login')
     user = User.query.get_or_404(session['user_id'])
     actuals = SalesActual.query.get(session['user_id'])
@@ -756,7 +761,7 @@ def submit_sales():
     for i in weekly_data:
         db.session.delete(i)
     db.session.commit()
-    flash('Sales reset and logged into historical sales data')
+    flash('Sales reset and logged into historical sales data', 'success')
     return redirect('/sales')
 
 @app.route('/historic_sales/<int:user_id>')

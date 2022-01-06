@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_2.html' %}
 
 {% block title %}Add New Menu Item{% endblock %}
 
@@ -6,7 +6,9 @@
 {% block content %}
 <h1>{{menu.menu_name}}</h1>
 <h3>{{menu.menu_description}}</h3>
-<div id = 'menu_list'>
+<div class = 'container'></div>
+<div class = 'row'>
+<div id = 'menu_list' class = 'col'>
 {% for item in menu.menu_items %}
 
 <div  class = 'card' style = 'width: 18rem;'>
@@ -21,7 +23,7 @@
 
 {% endfor %}
 </div>
-<aside>
+<div class = 'col'>
 <form  method = 'POST'>
     {{form.hidden_tag()}}
     {% for field in form if field.widget.input_type != 'hidden' %}
@@ -36,5 +38,7 @@
     {% endfor %}
     <button id = 'add_menu_item' data-id = '{{menu.id}}'>Add Item</button>
 </form>
-</aside>
+</div>
+</div>
+</div>
 {% endblock %}

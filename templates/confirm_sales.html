@@ -8,7 +8,7 @@
 
 <form method = 'POST'>
     <p>Do you want to submit your sales for the week? Once submitted, current sales data will be reset and logged on historical page</p>
-    <button formaction = '/submit_sales'>Confirm</button>
-    <button formaction = '/sales'>Do Not Submit Sales</button>
+    <button type = 'button' class = 'btn btn-success' formaction = '/submit_sales'>Confirm</button>
+    <button type = 'button' class = 'btn btn-danger' formaction = '/sales'>Do Not Submit Sales</button>
 </form>
 {% endblock %}
