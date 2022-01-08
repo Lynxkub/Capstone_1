@@ -11,3 +11,7 @@ The user is able to input weekly sales forecasts and enter actual sales as the w
 The user is also able to input product that is purchased at Walmart for the restaurant. The purchase and sales data are combined in the end to generate a weekly inventory after the inventory count is completed.
 
 They can track and view historic data for their operation.
+
+This project was built using Python with a Flask framework.
+
+Visit finished product at https://food-cost-calc-app.herokuapp.com/
